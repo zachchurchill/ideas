@@ -1,4 +1,5 @@
 import dataclasses
+from pprint import pprint
 from typing import Dict
 
 import pandas as pd
@@ -45,4 +46,25 @@ class BatteryOptDataFrame(pd.DataFrame):
             r.identifier: LpVariable(r.voltage, r.connectors)
             for r in self.itertuples()
         }
+
+
+if __name__ == "__main__":
+    bus = ["a", "b", "c"]
+    voltage = [0.8, 1.5, 3.1]
+    connectors = [1, 2, 5]
+
+    batteries = BatteryOptDataFrame({"bus": bus, "voltage": voltage, "connectors": connectors})
+    print(batteries)
+
+    battery = BatteryOptDataFrame(
+        {
+            "bus": [bus[0]],
+            "voltage": [voltage[0]],
+            "connectors": [connectors[0]],
+        }
+    )
+    print(battery)
+
+    lp_vars = batteries.generate_pulp_variables()
+    pprint(lp_vars)
 

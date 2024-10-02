@@ -65,7 +65,10 @@ class SecretStore:
 
     @staticmethod
     def secret_types() -> List[Secret]:
-        return [GenericSecret, DbSecret]
+        all_children = Secret.__subclasses__()
+        for child in all_children:
+            all_children.extend(child.__subclasses__())
+        return all_children
 
     def __init__(self):
         self._secrets: List[Secret] = []
